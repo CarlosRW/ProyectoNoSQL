@@ -1,0 +1,91 @@
+:root {
+  --azul-profundo: #0b3d47;
+  --teal: #147a72;
+  --teal-claro: #1fa39a;
+  --arena: #f2ede1;
+  --coral: #e0663c;
+  --gris-texto: #33474a;
+}
+
+body {
+  background-color: var(--arena);
+  color: var(--gris-texto);
+  font-family: 'Segoe UI', system-ui, sans-serif;
+}
+
+.navbar-rolvin {
+  background: linear-gradient(90deg, var(--azul-profundo), var(--teal));
+}
+
+.navbar-rolvin .navbar-brand,
+.navbar-rolvin .nav-link {
+  color: #ffffff !important;
+  font-weight: 600;
+}
+
+.navbar-rolvin .nav-link.active {
+  border-bottom: 3px solid var(--coral);
+}
+
+.card-modulo {
+  border: none;
+  border-radius: 14px;
+  box-shadow: 0 4px 14px rgba(11, 61, 71, 0.12);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  height: 100%;
+}
+
+.card-modulo:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 22px rgba(11, 61, 71, 0.18);
+}
+
+.card-modulo .icono {
+  font-size: 2.2rem;
+  color: var(--teal-claro);
+}
+
+.btn-teal {
+  background-color: var(--teal);
+  border-color: var(--teal);
+  color: #fff;
+}
+
+.btn-teal:hover {
+  background-color: var(--azul-profundo);
+  border-color: var(--azul-profundo);
+  color: #fff;
+}
+
+.tabla-rolvin thead {
+  background-color: var(--azul-profundo);
+  color: #fff;
+}
+
+.tabla-rolvin tbody tr:hover {
+  background-color: rgba(31, 163, 154, 0.08);
+}
+
+.panel-form {
+  background: #ffffff;
+  border-radius: 14px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 14px rgba(11, 61, 71, 0.1);
+}
+
+.badge-activo {
+  background-color: var(--teal-claro);
+}
+
+.badge-inactivo {
+  background-color: #b0b8b9;
+}
+
+@media (max-width: 576px) {
+  .panel-form {
+    padding: 1rem;
+  }
+  h2 {
+    font-size: 1.5rem;
+  }
+}
