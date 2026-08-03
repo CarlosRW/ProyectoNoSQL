@@ -1,9 +1,13 @@
+const path = require('path');
 const express = require('express');
 const cors = require('cors');
 require('dotenv').config();
 
 const conectarDB = require('./config/db');
 const tourRoutes = require('./routes/tourRoutes');
+const clienteRoutes = require('./routes/clienteRoutes');
+const vendedorRoutes = require('./routes/vendedorRoutes');
+const embarcacionRoutes = require('./routes/embarcacionRoutes');
 
 const app = express();
 
@@ -15,8 +19,14 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Rutas
+// Servir el frontend estático (carpeta front/)
+app.use(express.static(path.join(__dirname, 'front')));
+
+// Rutas API
 app.use('/api/tours', tourRoutes);
+app.use('/api/clientes', clienteRoutes);
+app.use('/api/vendedores', vendedorRoutes);
+app.use('/api/embarcaciones', embarcacionRoutes);
 
 // Iniciar servidor
 const PORT = process.env.PORT || 5000;
