@@ -8,6 +8,7 @@ const tourRoutes = require('./routes/tourRoutes');
 const clienteRoutes = require('./routes/clienteRoutes');
 const vendedorRoutes = require('./routes/vendedorRoutes');
 const embarcacionRoutes = require('./routes/embarcacionRoutes');
+const transporteTerrestreRoutes = require('./routes/transporteTerrestreRoutes');
 
 const app = express();
 
@@ -27,6 +28,7 @@ app.use('/api/tours', tourRoutes);
 app.use('/api/clientes', clienteRoutes);
 app.use('/api/vendedores', vendedorRoutes);
 app.use('/api/embarcaciones', embarcacionRoutes);
+app.use('/api/transporte-terrestre', transporteTerrestreRoutes);
 
 // Iniciar servidor
 const PORT = process.env.PORT || 5000;
