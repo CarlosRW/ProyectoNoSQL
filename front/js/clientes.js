@@ -1,9 +1,13 @@
+
+const API_URL = window.API_URL || "http://localhost:3000/api";
+const ENDPOINT_CLIENTES = `${API_URL}/clientes`;
+
 let clienteIdEdicion = null;
 
 $(document).ready(function () {
   cargarClientes();
 
-  $("#formCliente").on("submit", function (e) {
+  $("#formCliente").on("submit", function (e) {Select Default Profile
     e.preventDefault();
 
     const cliente = {
@@ -35,6 +39,79 @@ $(document).ready(function () {
   $("#btnCancelar").on("click", resetFormulario);
 });
 
+/* ==========================================================================
+   1. (PETICIONES HTTP)
+   ========================================================================== */
+
+// GET: Obtener todos los clientes
+function obtenerClientes(callback) {
+  $.ajax({
+    url: ENDPOINT_CLIENTES,
+    method: "GET",
+    dataType: "json",
+    success: function (data) {
+      callback(null, data);
+    },
+    error: function (xhr, status, error) {
+      console.error("Error al obtener clientes:", error);
+      callback(error, null);
+    }
+  });
+}
+
+// POST: Crear un nuevo cliente
+function crearCliente(cliente, callback) {
+  $.ajax({
+    url: ENDPOINT_CLIENTES,
+    method: "POST",
+    contentType: "application/json",
+    data: JSON.stringify(cliente),
+    success: function (respuesta) {
+      callback(null, respuesta);
+    },
+    error: function (xhr, status, error) {
+      console.error("Error al crear cliente:", error);
+      callback(error, null);
+    }
+  });
+}
+
+// PUT: Actualizar un cliente existente
+function actualizarCliente(id, cliente, callback) {
+  $.ajax({
+    url: `${ENDPOINT_CLIENTES}/${id}`,
+    method: "PUT",
+    contentType: "application/json",
+    data: JSON.stringify(cliente),
+    success: function (respuesta) {
+      callback(null, respuesta);
+    },
+    error: function (xhr, status, error) {
+      console.error("Error al actualizar cliente:", error);
+      callback(error, null);
+    }
+  });
+}
+
+// DELETE: Eliminar un cliente por ID
+function eliminarCliente(id, callback) {
+  $.ajax({
+    url: `${ENDPOINT_CLIENTES}/${id}`,
+    method: "DELETE",
+    success: function (respuesta) {
+      callback(null, respuesta);
+    },
+    error: function (xhr, status, error) {
+      console.error("Error al eliminar cliente:", error);
+      callback(error, null);
+    }
+  });
+}
+
+/* ==========================================================================
+   2. FUNCIONES DE MANIPULACIÓN DEL DOM / VISTA
+   ========================================================================== */
+
 function cargarClientes() {
   obtenerClientes(function (error, clientes) {
     if (error) return mostrarAlerta("danger", "No se pudo cargar la lista de clientes.");
@@ -46,7 +123,7 @@ function dibujarTabla(clientes) {
   const tabla = $("#tablaClientes");
   tabla.empty();
 
-  if (clientes.length === 0) {
+  if (!clientes || clientes.length === 0) {
     tabla.append(`<tr><td colspan="6" class="text-center text-muted">No hay clientes registrados</td></tr>`);
     return;
   }
@@ -54,11 +131,11 @@ function dibujarTabla(clientes) {
   clientes.forEach(function (c) {
     const fila = `
       <tr>
-        <td>${c.nombre}</td>
-        <td>${c.nacionalidad}</td>
-        <td>${c.tipo_cliente}</td>
-        <td>${c.telefono}</td>
-        <td>${c.email}</td>
+        <td>${c.nombre || ''}</td>
+        <td>${c.nacionalidad || ''}</td>
+        <td>${c.tipo_cliente || ''}</td>
+        <td>${c.telefono || ''}</td>
+        <td>${c.email || ''}</td>
         <td class="text-end">
           <button class="btn btn-sm btn-outline-secondary me-1 btn-editar" data-id="${c._id}"><i class="bi bi-pencil"></i></button>
           <button class="btn btn-sm btn-outline-danger btn-eliminar" data-id="${c._id}"><i class="bi bi-trash"></i></button>
@@ -70,7 +147,9 @@ function dibujarTabla(clientes) {
   $(".btn-editar").on("click", function () {
     const id = $(this).data("id");
     const cliente = clientes.find(c => c._id === id);
-    cargarFormulario(cliente);
+    if (cliente) {
+      cargarFormulario(cliente);
+    }
   });
 
   $(".btn-eliminar").on("click", function () {
