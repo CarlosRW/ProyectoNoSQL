@@ -12,6 +12,10 @@ const transporteTerrestreRoutes = require('./routes/transporteTerrestreRoutes');
 const personalRoutes = require('./routes/personalRoutes');
 const reservaRoutes = require('./routes/reservaRoutes');
 const salidaOperacionRoutes = require('./routes/salidaOperacionRoutes');
+const costoVariableRoutes = require('./routes/costoVariableRoutes');
+const comisionLiquidacionRoutes = require('./routes/comisionLiquidacionRoutes');
+const usuarioSistemaRoutes = require('./routes/usuarioSistemaRoutes');
+const historicoKpiRoutes = require('./routes/historicoKpiRoutes');
 
 const app = express();
 
@@ -35,6 +39,10 @@ app.use('/api/transporte-terrestre', transporteTerrestreRoutes);
 app.use('/api/personal', personalRoutes);
 app.use('/api/reservas', reservaRoutes);
 app.use('/api/salidas-operaciones', salidaOperacionRoutes);
+app.use('/api/costos-variables', costoVariableRoutes);
+app.use('/api/comisiones-liquidacion', comisionLiquidacionRoutes);
+app.use('/api/usuarios-sistema', usuarioSistemaRoutes);
+app.use('/api/historico-kpis', historicoKpiRoutes);
 
 // Iniciar servidor
 const PORT = process.env.PORT || 5000;

@@ -1,12 +1,15 @@
 const express = require('express');
 const router = express.Router();
+const bcrypt = require('bcryptjs');
 const UsuarioSistema = require('../models/UsuarioSistema');
+
+const RONDAS_SAL = 10;
 
 // GET /api/usuarios-sistema
 // Listar todos los usuarios del sistema
 router.get('/', async (req, res) => {
     try {
-        const usuarios = await UsuarioSistema.find().sort({ nombre: 1 });
+        const usuarios = await UsuarioSistema.find().sort({ nombre_usuario: 1 });
 
         res.status(200).json(usuarios);
     } catch (error) {
@@ -21,7 +24,17 @@ router.get('/', async (req, res) => {
 // Crear un nuevo usuario del sistema
 router.post('/', async (req, res) => {
     try {
-        const nuevoUsuario = new UsuarioSistema(req.body);
+        const { contrasena, ...datosUsuario } = req.body;
+
+        if (!contrasena) {
+            return res.status(400).json({
+                mensaje: 'La contraseña es obligatoria'
+            });
+        }
+
+        datosUsuario.password_hash = await bcrypt.hash(contrasena, RONDAS_SAL);
+
+        const nuevoUsuario = new UsuarioSistema(datosUsuario);
         const usuarioGuardado = await nuevoUsuario.save();
 
         res.status(201).json(usuarioGuardado);
@@ -37,9 +50,16 @@ router.post('/', async (req, res) => {
 // Actualizar un usuario del sistema por ID
 router.put('/:id', async (req, res) => {
     try {
+        const { contrasena, ...datosUsuario } = req.body;
+
+        // Solo se actualiza la contraseña si se envía una nueva
+        if (contrasena) {
+            datosUsuario.password_hash = await bcrypt.hash(contrasena, RONDAS_SAL);
+        }
+
         const usuarioActualizado = await UsuarioSistema.findByIdAndUpdate(
             req.params.id,
-            req.body,
+            datosUsuario,
             {
                 new: true,
                 runValidators: true

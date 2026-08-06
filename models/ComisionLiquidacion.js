@@ -8,10 +8,10 @@ const ComisionLiquidacionSchema = new mongoose.Schema(
             required: [true, 'El vendedor es obligatorio']
         },
 
-        periodo: {
-            type: String,
-            required: [true, 'El periodo es obligatorio'],
-            trim: true
+        reserva_id: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Reserva',
+            required: [true, 'La reserva es obligatoria']
         },
 
         monto_comision: {
@@ -20,25 +20,25 @@ const ComisionLiquidacionSchema = new mongoose.Schema(
             min: [0, 'El monto de la comisión no puede ser negativo']
         },
 
-        estado_liquidacion: {
+        estado: {
             type: String,
-            required: [true, 'El estado de la liquidación es obligatorio'],
+            required: [true, 'El estado es obligatorio'],
             enum: {
                 values: ['pendiente', 'liquidada', 'anulada'],
-                message: 'El estado de liquidación seleccionado no es válido'
+                message: 'El estado seleccionado no es válido'
             },
             default: 'pendiente'
         },
 
-        fecha_liquidacion: {
+        fecha_generada: {
             type: Date,
-            default: null
+            required: [true, 'La fecha de generación es obligatoria'],
+            default: Date.now
         },
 
-        observaciones: {
-            type: String,
-            trim: true,
-            default: ''
+        fecha_liquidada: {
+            type: Date,
+            default: null
         }
     },
     {
