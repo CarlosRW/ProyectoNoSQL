@@ -98,7 +98,7 @@ ProyectoNoSQL/
 
 ### 1. Clonar el repositorio
 ```bash
-git clone https://github.com/<usuario>/ProyectoNoSQL.git
+git clone https://github.com/CarlosRW/ProyectoNoSQL.git
 cd ProyectoNoSQL
 ```
 
