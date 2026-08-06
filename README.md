@@ -14,8 +14,8 @@ Profesor: **Mario Alberto Jiménez Espinoza**
 | Nataly Camareno Espinoza | ncamareno10081@ufide.ac.cr | NatalyCamareno |
 | María Paula Calvo Gamboa | mcalvo60700@ufide.ac.cr | paulaufide |
 | Ricardo Jara Quirós | rjara80940@ufide.ac.cr | RicardoJaraQ |
-| Carlos Steven Gálvez Navarro | cgalvez30381@ufide.ac.cr | steven |
-| Richard Herrera Mora | rherrera50066@ufide.ac.cr | |
+| Carlos Steven Gálvez Navarro | cgalvez30381@ufide.ac.cr | StevenGalvezz |
+| Richard Herrera Mora | rherrera50066@ufide.ac.cr |  |
 
 ---
 
@@ -38,6 +38,14 @@ El sistema consolida 12 colecciones según el diseño de base de datos del proye
 | Clientes | `clientes` | Registro de turistas nacionales y extranjeros |
 | Vendedores | `vendedores` | Intermediarios comerciales y comisionistas externos |
 | Embarcaciones | `embarcaciones` | Flota marítima de la empresa y su estado operativo |
+| Modulo | `modulo` | descripción |
+| Modulo | `modulo` | descripción |
+| Modulo | `modulo` | descripción |
+| Modulo | `modulo` | descripción |
+| Modulo | `modulo` | descripción |
+| Modulo | `modulo` | descripción |
+| Modulo | `modulo` | descripción |
+| Modulo | `modulo` | descripción |
 
 Cada módulo tiene su propia vista HTML, con formulario de creación/edición, tabla de registros, modal de detalle y confirmación de borrado.
 
