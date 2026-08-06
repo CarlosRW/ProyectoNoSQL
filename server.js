@@ -11,6 +11,7 @@ const embarcacionRoutes = require('./routes/embarcacionRoutes');
 const transporteTerrestreRoutes = require('./routes/transporteTerrestreRoutes');
 const personalRoutes = require('./routes/personalRoutes');
 const reservaRoutes = require('./routes/reservaRoutes');
+const salidaOperacionRoutes = require('./routes/salidaOperacionRoutes');
 
 const app = express();
 
@@ -33,6 +34,7 @@ app.use('/api/embarcaciones', embarcacionRoutes);
 app.use('/api/transporte-terrestre', transporteTerrestreRoutes);
 app.use('/api/personal', personalRoutes);
 app.use('/api/reservas', reservaRoutes);
+app.use('/api/salidas-operaciones', salidaOperacionRoutes);
 
 // Iniciar servidor
 const PORT = process.env.PORT || 5000;
