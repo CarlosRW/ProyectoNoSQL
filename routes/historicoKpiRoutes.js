@@ -2,11 +2,18 @@ const express = require('express');
 const router = express.Router();
 const HistoricoKpi = require('../models/HistoricoKpi');
 
+function calcularRentabilidadNeta(datos) {
+    const ingresos = Number(datos.ingresos_totales) || 0;
+    const costos = Number(datos.costos_totales) || 0;
+
+    return Number((ingresos - costos).toFixed(2));
+}
+
 // GET /api/historico-kpis
 // Listar todo el histórico de indicadores
 router.get('/', async (req, res) => {
     try {
-        const historicoKpis = await HistoricoKpi.find().sort({ fecha: -1 });
+        const historicoKpis = await HistoricoKpi.find().sort({ mes: -1 });
 
         res.status(200).json(historicoKpis);
     } catch (error) {
@@ -21,7 +28,12 @@ router.get('/', async (req, res) => {
 // Crear un nuevo registro en el histórico de indicadores
 router.post('/', async (req, res) => {
     try {
-        const nuevoHistoricoKpi = new HistoricoKpi(req.body);
+        const datosHistoricoKpi = {
+            ...req.body,
+            rentabilidad_neta: calcularRentabilidadNeta(req.body)
+        };
+
+        const nuevoHistoricoKpi = new HistoricoKpi(datosHistoricoKpi);
         const historicoKpiGuardado = await nuevoHistoricoKpi.save();
 
         res.status(201).json(historicoKpiGuardado);
@@ -37,9 +49,14 @@ router.post('/', async (req, res) => {
 // Actualizar un registro del histórico de indicadores por ID
 router.put('/:id', async (req, res) => {
     try {
+        const datosHistoricoKpi = {
+            ...req.body,
+            rentabilidad_neta: calcularRentabilidadNeta(req.body)
+        };
+
         const historicoKpiActualizado = await HistoricoKpi.findByIdAndUpdate(
             req.params.id,
-            req.body,
+            datosHistoricoKpi,
             {
                 new: true,
                 runValidators: true

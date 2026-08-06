@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Rolvin Tours - Vendedores</title>
+  <title>Rolvin Tours - Histórico de indicadores</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
   <link href="../css/style.css" rel="stylesheet">
@@ -23,7 +23,7 @@
         <div class="navbar-nav ms-auto gap-lg-3">
           <a class="nav-link" href="tours.html">Tours</a>
           <a class="nav-link" href="clientes.html">Clientes</a>
-          <a class="nav-link active" href="vendedores.html">Vendedores</a>
+          <a class="nav-link" href="vendedores.html">Vendedores</a>
           <a class="nav-link" href="embarcaciones.html">Embarcaciones</a>
           <a class="nav-link" href="transporteTerrestre.html">Transporte terrestre</a>
           <a class="nav-link" href="personal.html">Personal</a>
@@ -32,50 +32,64 @@
           <a class="nav-link" href="costosVariables.html">Costos variables</a>
           <a class="nav-link" href="comisionesLiquidacion.html">Comisiones</a>
           <a class="nav-link" href="usuariosSistema.html">Usuarios</a>
-          <a class="nav-link" href="historicoKpis.html">Indicadores</a>
+          <a class="nav-link active" href="historicoKpis.html">Indicadores</a>
         </div>
       </div>
     </div>
   </nav>
 
   <div class="container">
-    <h2 class="mb-4"><i class="bi bi-person-badge"></i> Gestión de Vendedores</h2>
+    <h2 class="mb-4"><i class="bi bi-graph-up-arrow"></i> Histórico de Indicadores</h2>
 
     <div id="zonaAlertas"></div>
 
     <div class="row g-4">
       <div class="col-lg-4">
         <div class="panel-form">
-          <h5 id="tituloFormulario" class="mb-3">Nuevo vendedor</h5>
-          <form id="formVendedor">
+          <h5 id="tituloFormulario" class="mb-3">Nuevo indicador</h5>
+          <form id="formHistoricoKpi">
             <div class="mb-3">
-              <label class="form-label">Nombre</label>
-              <input type="text" class="form-control" id="nombre" required>
+              <label for="mes" class="form-label">Mes</label>
+              <input type="month" class="form-control" id="mes" required>
             </div>
+
             <div class="mb-3">
-              <label class="form-label">Zona</label>
-              <input type="text" class="form-control" id="zona" placeholder="Ej. Santa Teresa" required>
-            </div>
-            <div class="mb-3">
-              <label class="form-label">Tipo</label>
-              <select class="form-select" id="tipo" required>
-                <option value="hotel asociado">Hotel asociado</option>
-                <option value="vendedor_externo">Vendedor externo</option>
-                <option value="independiente">Independiente</option>
+              <label for="temporada" class="form-label">Temporada</label>
+              <select class="form-select" id="temporada" required>
+                <option value="alta">Alta</option>
+                <option value="baja">Baja</option>
               </select>
             </div>
+
             <div class="mb-3">
-              <label class="form-label">Porcentaje de comisión (%)</label>
-              <input type="number" step="0.01" min="0" max="100" class="form-control" id="porcentaje_comision" required>
+              <label for="total_clientes" class="form-label">Total de clientes</label>
+              <input type="number" min="0" class="form-control" id="total_clientes" placeholder="Ej. 312" required>
             </div>
+
             <div class="mb-3">
-              <label class="form-label">Teléfono</label>
-              <input type="text" class="form-control" id="telefono" required>
+              <label for="ocupacion_promedio" class="form-label">Ocupación promedio (%)</label>
+              <input type="number" min="0" max="100" step="0.1" class="form-control" id="ocupacion_promedio" placeholder="Ej. 81" required>
             </div>
-            <div class="form-check mb-3">
-              <input type="checkbox" class="form-check-input" id="activo" checked>
-              <label class="form-check-label" for="activo">Activo</label>
+
+            <div class="mb-3">
+              <label for="tour_mas_vendido" class="form-label">Tour más vendido</label>
+              <input type="text" class="form-control" id="tour_mas_vendido" list="listaTours" placeholder="Ej. Snorkel Isla Tortuga" required>
+              <datalist id="listaTours"></datalist>
             </div>
+
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label for="ingresos_totales" class="form-label">Ingresos totales</label>
+                <input type="number" min="0" step="0.01" class="form-control" id="ingresos_totales" placeholder="Ej. 18500" required>
+              </div>
+              <div class="col-md-6 mb-3">
+                <label for="costos_totales" class="form-label">Costos totales</label>
+                <input type="number" min="0" step="0.01" class="form-control" id="costos_totales" placeholder="Ej. 6200" required>
+              </div>
+            </div>
+
+            <div class="form-text mb-3">La rentabilidad neta se calcula automáticamente (ingresos - costos).</div>
+
             <div class="d-flex gap-2">
               <button type="submit" id="btnGuardar" class="btn btn-teal">Guardar</button>
               <button type="button" id="btnCancelar" class="btn btn-outline-secondary d-none">Cancelar</button>
@@ -89,15 +103,18 @@
           <table class="table tabla-rolvin align-middle">
             <thead>
               <tr>
-                <th>Nombre</th>
-                <th>Zona</th>
-                <th>Tipo</th>
-                <th>Comisión</th>
-                <th>Estado</th>
+                <th>Mes</th>
+                <th>Temporada</th>
+                <th>Clientes</th>
+                <th>Ocupación</th>
+                <th>Tour más vendido</th>
+                <th>Ingresos</th>
+                <th>Costos</th>
+                <th>Rentabilidad</th>
                 <th class="text-end">Acciones</th>
               </tr>
             </thead>
-            <tbody id="tablaVendedores"></tbody>
+            <tbody id="tablaHistoricoKpis"></tbody>
           </table>
         </div>
       </div>
@@ -107,8 +124,8 @@
   <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script src="../js/config.js"></script>
-  <script src="../js/model/vendedoresModel.js"></script>
-  <script src="../js/vendedores.js"></script>
+  <script src="../js/model/historicoKpisModel.js"></script>
+  <script src="../js/historicoKpis.js"></script>
 </body>
 
 </html>

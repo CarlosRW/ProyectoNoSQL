@@ -2,30 +2,11 @@ const mongoose = require('mongoose');
 
 const UsuarioSistemaSchema = new mongoose.Schema(
     {
-        nombre: {
+        nombre_usuario: {
             type: String,
-            required: [true, 'El nombre es obligatorio'],
-            trim: true
-        },
-
-        correo: {
-            type: String,
-            required: [true, 'El correo es obligatorio'],
-            trim: true,
-            lowercase: true
-        },
-
-        usuario: {
-            type: String,
-            required: [true, 'El usuario es obligatorio'],
+            required: [true, 'El nombre de usuario es obligatorio'],
             trim: true,
             unique: true
-        },
-
-        contrasena: {
-            type: String,
-            required: [true, 'La contraseña es obligatoria'],
-            minlength: [6, 'La contraseña debe tener al menos 6 caracteres']
         },
 
         rol: {
@@ -33,7 +14,7 @@ const UsuarioSistemaSchema = new mongoose.Schema(
             required: [true, 'El rol es obligatorio'],
             enum: {
                 values: [
-                    'administrador',
+                    'gerencia',
                     'operaciones',
                     'ventas',
                     'contabilidad'
@@ -42,14 +23,31 @@ const UsuarioSistemaSchema = new mongoose.Schema(
             }
         },
 
-        estado: {
+        password_hash: {
             type: String,
-            required: [true, 'El estado es obligatorio'],
-            enum: {
-                values: ['activo', 'inactivo'],
-                message: 'El estado seleccionado no es válido'
-            },
-            default: 'activo'
+            required: [true, 'La contraseña es obligatoria']
+        },
+
+        permisos: [
+            {
+                type: String,
+                enum: {
+                    values: [
+                        'ver_reportes_financieros',
+                        'gestionar_usuarios',
+                        'ver_kpis',
+                        'gestionar_reservas',
+                        'gestionar_inventario',
+                        'ver_comisiones'
+                    ],
+                    message: 'El permiso seleccionado no es válido'
+                }
+            }
+        ],
+
+        ultimo_acceso: {
+            type: Date,
+            default: null
         }
     },
     {
@@ -57,5 +55,13 @@ const UsuarioSistemaSchema = new mongoose.Schema(
         timestamps: true
     }
 );
+
+// Nunca exponer el hash de la contraseña en las respuestas JSON
+UsuarioSistemaSchema.set('toJSON', {
+    transform: function (doc, ret) {
+        delete ret.password_hash;
+        return ret;
+    }
+});
 
 module.exports = mongoose.model('UsuarioSistema', UsuarioSistemaSchema);

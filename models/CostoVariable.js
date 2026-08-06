@@ -1,64 +1,61 @@
-function obtenerCostosVariables(callback) {
-    $.ajax({
-        type: "GET",
-        url: `${API_URL}/costos-variables`,
-        dataType: "json",
+const mongoose = require('mongoose');
 
-        success: function (data) {
-            callback(null, data);
+const CostoVariableSchema = new mongoose.Schema(
+    {
+        tipo_costo: {
+            type: String,
+            required: [true, 'El tipo de costo es obligatorio'],
+            enum: {
+                values: [
+                    'combustible',
+                    'mantenimiento',
+                    'insumos',
+                    'personal_temporal',
+                    'comisiones_terceros',
+                    'otros'
+                ],
+                message: 'El tipo de costo seleccionado no es válido'
+            }
         },
 
-        error: function (error) {
-            callback(error, null);
-        }
-    });
-}
-
-function crearCostoVariable(costoVariable, callback) {
-    $.ajax({
-        type: "POST",
-        url: `${API_URL}/costos-variables`,
-        contentType: "application/json",
-        data: JSON.stringify(costoVariable),
-
-        success: function (data) {
-            callback(null, data);
+        salida_id: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'SalidaOperacion',
+            required: [true, 'La salida u operación es obligatoria']
         },
 
-        error: function (error) {
-            callback(error, null);
-        }
-    });
-}
-
-function actualizarCostoVariable(id, costoVariable, callback) {
-    $.ajax({
-        type: "PUT",
-        url: `${API_URL}/costos-variables/${id}`,
-        contentType: "application/json",
-        data: JSON.stringify(costoVariable),
-
-        success: function (data) {
-            callback(null, data);
+        monto: {
+            type: Number,
+            required: [true, 'El monto es obligatorio'],
+            min: [0, 'El monto no puede ser negativo']
         },
 
-        error: function (error) {
-            callback(error, null);
-        }
-    });
-}
-
-function eliminarCostoVariable(id, callback) {
-    $.ajax({
-        type: "DELETE",
-        url: `${API_URL}/costos-variables/${id}`,
-
-        success: function (data) {
-            callback(null, data);
+        moneda: {
+            type: String,
+            required: [true, 'La moneda es obligatoria'],
+            enum: {
+                values: ['USD', 'CRC'],
+                message: 'La moneda seleccionada no es válida'
+            },
+            default: 'CRC'
         },
 
-        error: function (error) {
-            callback(error, null);
+        fecha: {
+            type: Date,
+            required: [true, 'La fecha es obligatoria'],
+            default: Date.now
+        },
+
+        responsable_registro: {
+            type: String,
+            required: [true, 'El responsable del registro es obligatorio'],
+            trim: true
         }
-    });
-}
+    },
+    {
+        collection: 'costos_variables',
+        timestamps: true
+    }
+);
+
+module.exports = mongoose.model('CostoVariable', CostoVariableSchema);

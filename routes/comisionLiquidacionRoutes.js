@@ -2,8 +2,8 @@ const express = require('express');
 const router = express.Router();
 const ComisionLiquidacion = require('../models/ComisionLiquidacion');
 
-function requiereFechaLiquidacion(estadoLiquidacion) {
-    return estadoLiquidacion === 'liquidada';
+function requiereFechaLiquidada(estado) {
+    return estado === 'liquidada';
 }
 
 // GET /api/comisiones-liquidacion
@@ -12,7 +12,15 @@ router.get('/', async (req, res) => {
     try {
         const comisiones = await ComisionLiquidacion.find()
             .populate('vendedor_id', 'nombre zona tipo')
-            .sort({ periodo: -1 });
+            .populate({
+                path: 'reserva_id',
+                select: 'monto_total moneda fecha_tour cliente_id tour_id',
+                populate: [
+                    { path: 'cliente_id', select: 'nombre' },
+                    { path: 'tour_id', select: 'nombre_tour' }
+                ]
+            })
+            .sort({ fecha_generada: -1 });
 
         res.status(200).json(comisiones);
     } catch (error) {
@@ -31,8 +39,8 @@ router.post('/', async (req, res) => {
             ...req.body
         };
 
-        if (!requiereFechaLiquidacion(datosComision.estado_liquidacion)) {
-            datosComision.fecha_liquidacion = null;
+        if (!requiereFechaLiquidada(datosComision.estado)) {
+            datosComision.fecha_liquidada = null;
         }
 
         const nuevaComision = new ComisionLiquidacion(datosComision);
@@ -55,8 +63,8 @@ router.put('/:id', async (req, res) => {
             ...req.body
         };
 
-        if (!requiereFechaLiquidacion(datosComision.estado_liquidacion)) {
-            datosComision.fecha_liquidacion = null;
+        if (!requiereFechaLiquidada(datosComision.estado)) {
+            datosComision.fecha_liquidada = null;
         }
 
         const comisionActualizada = await ComisionLiquidacion.findByIdAndUpdate(
